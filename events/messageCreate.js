@@ -35,13 +35,13 @@ module.exports = async (client, message) => {
   const { getPrefix } = require("../util/guildDb");
   const prefix = getPrefix(message.guild.id);
   if (message.content.startsWith(prefix)) {
-    const args = message.content.slice(prefix.length).trim().split(/\\s+/);
+    const args = message.content.slice(prefix.length).trim().split(" ");
     const name = (args.shift() || "").toLowerCase();
     const member = message.member;
     const target = message.mentions.members.first();
     const reply = (text) => message.reply({ content: text }).catch(() => {});
     if (name === "help") {
-      return reply("**Pulse prefix commands**\\n`"+prefix+"ping`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\\nChange prefix with `/prefix set`.");
+      return reply("**Pulse prefix commands**\n`"+prefix+"ping`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\nChange prefix with `/prefix set`.");
     }
     if (name === "ping") return reply("Pong! "+client.ws.ping+"ms");
     if (name === "ban") {
