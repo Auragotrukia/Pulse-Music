@@ -12,7 +12,7 @@ module.exports = new SlashCommand().setName("prefix").setDescription("View or ch
  if(!interaction.memberPermissions.has("MANAGE_GUILD")) return interaction.reply({content:"You need Manage Server permission to change the prefix.",ephemeral:true});
  if(sub==="reset"){setPrefix(interaction.guild.id,"!");return interaction.reply({content:"Prefix reset to `!`",ephemeral:true});}
  const value=options.getString("value").trim();
- if(!/^[^\\s]{1,5}$/.test(value)) return interaction.reply({content:"Prefix must be 1–5 characters with no spaces.",ephemeral:true});
+ if(!/^\\S{1,5}$/.test(value)) return interaction.reply({content:"Prefix must be 1–5 characters with no spaces.",ephemeral:true});
  setPrefix(interaction.guild.id,value);
  return interaction.reply({embeds:[new MessageEmbed().setColor(client.config.embedColor).setTitle("Prefix updated").setDescription("New prefix: `"+value+"`")]});
 });
