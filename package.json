@@ -1,10 +1,10 @@
 {
   "name": "discord-musicbot",
-  "version": "5.0.0-beta",
-  "description": "Very simple discord music bot with the discord.js with Song Name playing. It can able to play music with the song name",
+  "version": "5.2.0",
+  "description": "Pulse Music — Discord music and multitasking utility bot",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "node index.js",
     "rm-logs": "rm logs.log",
     "lint": "prettier --check .",
     "deploy": "node deploy/deployGlobal",
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/SudhanPlayz/Discord-MusicBot.git"
   },
   "engines": {
-    "node": ">=16.x <=16.16"
+    "node": ">=16.9.0 <21"
   },
   "keywords": [
     "discord",

@@ -1,27 +1,13 @@
-//JotaroKujo0525 note, this is a deed that i should've done a long time ago
-require('dotenv').config()
-
+require("dotenv").config();
+const http = require("http");
 const DiscordMusicBot = require("./lib/DiscordMusicBot");
-const { exec } = require("child_process");
-
-if (process.env.REPL_ID) {
-	console.log("Replit system detected, initiating special `unhandledRejection` event listener.")
-	process.on('unhandledRejection', (reason, promise) => {
-		promise.catch((err) => {
-			if (err.status === 429) {
-				console.log("something went wrong whilst trying to connect to discord gateway, resetting...");
-				exec("kill 1");
-			}
-		});
-	});
-}
-
 const client = new DiscordMusicBot();
-
-console.log("Make sure to fill in the config.js before starting the bot.");
-
-const getClient = () => client;
-
-module.exports = {
-	getClient,
-};
+const port = Number(process.env.PORT || 10000);
+http.createServer((req, res) => {
+  if (req.url === "/health" || req.url === "/") {
+    res.writeHead(200, { "content-type": "application/json" });
+    return res.end(JSON.stringify({ ok: true, service: "Pulse Music", bot: client.isReady() }));
+  }
+  res.writeHead(404); res.end("Not found");
+}).listen(port, "0.0.0.0", () => console.log("Health endpoint listening on " + port));
+module.exports = { getClient: () => client };
