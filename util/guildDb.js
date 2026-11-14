@@ -95,13 +95,23 @@ const getDjOnly = (guild_id) => {
     return !!_getOrCreateGuildDb(guild_id)?.djOnly;
 }
 
-// TODO: Write more stuff here
-
-
+// Prefix and moderation settings
+const getGuildData = (guild_id) => _getOrCreateGuildDb(guild_id);
+const setGuildData = (guild_id, patch) => {
+    const d = _getOrCreateGuildDb(guild_id);
+    Object.assign(d, patch);
+    set(_getGuildDbName(guild_id), d);
+    return d;
+};
+const getPrefix = (guild_id) => getGuildData(guild_id).prefix || "!";
+const setPrefix = (guild_id, prefix) => setGuildData(guild_id, { prefix });
 
 module.exports = {
     setDjOnly,
     getDjOnly,
     deleteGuildDatabase,
-    // new export here
-}
+    getGuildData,
+    setGuildData,
+    getPrefix,
+    setPrefix,
+};
