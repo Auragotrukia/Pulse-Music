@@ -71,10 +71,11 @@ const command = new SlashCommand()
           embeds: [
             new MessageEmbed()
               .setColor("RED")
-              .setDescription("There was an error while searching"),
+              .setDescription("Search failed. The Lavalink node or its search source returned an error. Please check the node logs."),
           ],
         })
         .catch(this.warn);
+      return;
     }
 
     if (res.loadType === "NO_MATCHES") {
