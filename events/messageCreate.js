@@ -48,7 +48,7 @@ module.exports = async (client, message) => {
       if (action === "reset") { setPrefix(message.guild.id, "!"); return reply("Prefix reset to `!`."); }
       if (action === "set") {
         const next = (args.shift() || "").trim();
-        if (!/^\\S{1,5}$/.test(next)) return reply("Usage: `" + prefix + "prefix set ?` (1–5 characters, no spaces).");
+        if (!/^\S{1,5}$/.test(next)) return reply("Usage: `" + prefix + "prefix set ?` (1–5 characters, no spaces).");
         try { setPrefix(message.guild.id, next); return reply("Prefix updated to `" + next + "`."); }
         catch (error) { client.error("Prefix save failed: " + error.message); return reply("I could not save that prefix. Try `/prefix set`."); }
       }
