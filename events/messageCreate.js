@@ -32,16 +32,30 @@ module.exports = async (client, message) => {
   }
 
   if (message.author.bot || !message.guild) return;
-  const { getPrefix } = require("../util/guildDb");
-  const prefix = getPrefix(message.guild.id);
+  const { getPrefix, setPrefix } = require("../util/guildDb");
+  let prefix = "!";
+  try { prefix = getPrefix(message.guild.id) || "!"; } catch (error) { client.warn("Prefix lookup failed: " + error.message); }
   if (message.content.startsWith(prefix)) {
-    const args = message.content.slice(prefix.length).trim().split(" ");
+    const args = message.content.slice(prefix.length).trim().split(/\\s+/);
     const name = (args.shift() || "").toLowerCase();
     const member = message.member;
     const target = message.mentions.members.first();
     const reply = (text) => message.reply({ content: text }).catch(() => {});
+    if (name === "prefix") {
+      const action = (args.shift() || "show").toLowerCase();
+      if (action === "show") return reply("Current prefix: `" + prefix + "`");
+      if (!member.permissions.has("MANAGE_GUILD")) return reply("You need Manage Server permission to change the prefix.");
+      if (action === "reset") { setPrefix(message.guild.id, "!"); return reply("Prefix reset to `!`."); }
+      if (action === "set") {
+        const next = (args.shift() || "").trim();
+        if (!/^\\S{1,5}$/.test(next)) return reply("Usage: `" + prefix + "prefix set ?` (1–5 characters, no spaces).");
+        try { setPrefix(message.guild.id, next); return reply("Prefix updated to `" + next + "`."); }
+        catch (error) { client.error("Prefix save failed: " + error.message); return reply("I could not save that prefix. Try `/prefix set`."); }
+      }
+      return reply("Use `" + prefix + "prefix show`, `" + prefix + "prefix set ?`, or `" + prefix + "prefix reset`.");
+    }
     if (name === "help") {
-      return reply("**Pulse prefix commands**\n`"+prefix+"ping`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\nChange prefix with `/prefix set`.");
+      return reply("**Pulse prefix commands**\\n`"+prefix+"ping`, `"+prefix+"prefix show/set/reset`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\\nYou can also use `/prefix set`.");
     }
     if (name === "ping") return reply("Pong! "+client.ws.ping+"ms");
     if (name === "ban") {
