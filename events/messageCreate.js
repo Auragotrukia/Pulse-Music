@@ -5,7 +5,7 @@ const { platform, arch } = require("os");
 module.exports = async (client, message) => {
   const refront = `^<@!?${client.user.id}>`;
   const mention = new RegExp(refront + "$");
-  const debugIdMention = new RegExp(refront + " debug-id ([^\\s]+)");
+  const debugIdMention = new RegExp(refront + " debug-id ([^\s]+)");
   const invite = `https://discord.com/oauth2/authorize?client_id=${
     client.config.clientId
   }&permissions=${client.config.inviteScopes.toString().replace(/,/g, "%20")}`;
@@ -36,7 +36,7 @@ module.exports = async (client, message) => {
   let prefix = "!";
   try { prefix = getPrefix(message.guild.id) || "!"; } catch (error) { client.warn("Prefix lookup failed: " + error.message); }
   if (message.content.startsWith(prefix)) {
-    const args = message.content.slice(prefix.length).trim().split(/\\s+/);
+    const args = message.content.slice(prefix.length).trim().split(/\s+/);
     const name = (args.shift() || "").toLowerCase();
     const member = message.member;
     const target = message.mentions.members.first();
@@ -55,7 +55,7 @@ module.exports = async (client, message) => {
       return reply("Use `" + prefix + "prefix show`, `" + prefix + "prefix set ?`, or `" + prefix + "prefix reset`.");
     }
     if (name === "help") {
-      return reply("**Pulse prefix commands**\\n`"+prefix+"ping`, `"+prefix+"prefix show/set/reset`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\\nYou can also use `/prefix set`.");
+      return reply("**Pulse prefix commands**\n`"+prefix+"ping`, `"+prefix+"prefix show/set/reset`, `"+prefix+"ban @user [reason]`, `"+prefix+"kick @user [reason]`, `"+prefix+"clear 1-100`, `"+prefix+"slowmode seconds`, `"+prefix+"lock`, `"+prefix+"unlock`\nYou can also use `/prefix set`.");
     }
     if (name === "ping") return reply("Pong! "+client.ws.ping+"ms");
     if (name === "ban") {
